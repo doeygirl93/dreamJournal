@@ -1,4 +1,4 @@
-import { MONGO_URI, DB, COLL } from "$env/static/private";
+import { MONGO_URI, DB, USER_COLL } from "$env/static/private";
 import MongoDB, { MongoClient } from "mongodb";
 import bcrypt from "bcryptjs"
 import type { RequestHandler } from "@sveltejs/kit";
@@ -6,7 +6,7 @@ import { json } from "@sveltejs/kit";
 
 let client = new MongoClient(MONGO_URI)
 let db = client.db(DB);
-let coll = db.collection(COLL);
+let coll = db.collection(USER_COLL);
 
 export const POST:RequestHandler=async({request})=>{
     let { username, password } = await request.json();
@@ -19,6 +19,7 @@ export const POST:RequestHandler=async({request})=>{
         coll.insertOne({
             username:username,
             password:password,
+            gardenIsPublic:false,
             dreams:[]
         });
         return json({msg:"success", success:true});

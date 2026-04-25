@@ -1,2 +1,7 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<div class="flex items-center gap-4 bg-blue-50 text-7x1">
+    <button>Sign up</button>
+    <button>Log in</button>
+</div>
+
+
+
