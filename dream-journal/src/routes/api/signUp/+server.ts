@@ -15,11 +15,13 @@ export const POST:RequestHandler=async({request})=>{
         if(found!=null){
             return json({msg:`User ${username} already exists`, success:false});
         }
-        let hash = bcrypt.hashSync(password, 10);
+        let hashPass = bcrypt.hashSync(password, 10);
         coll.insertOne({
             username:username,
-            password:password,
+            password:hashPass,
             gardenIsPublic:false,
+            currentStreak:0,
+            longestStreak:0,
             friends:[],
             dreams:[]
         });

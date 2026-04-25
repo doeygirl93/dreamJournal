@@ -3,6 +3,7 @@
     import axios from "axios";
 
     import Comment from "$lib/comps/Comment.svelte";
+    import { goto } from "$app/navigation";
 
     // mock data
     let mockUser = "12345";
@@ -130,8 +131,7 @@
     <div class="aboslute absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
         <button
         onclick={() => isZoomed = true}
-        class = " transition-all duration-1500 ease-in-out transform size-32 bg-white rounded-full flex items-center justify-center text-4xl {isZoomed ? 'scale-[3] translate-y-[-10%]':'scale-100'}"
-        > 
+        class = " transition-all duration-1500 ease-in-out transform size-32 bg-white rounded-full flex items-center justify-center text-4xl {isZoomed ? 'scale-[3] translate-y-[-10%] translate-x-[-125%] md:translate-x-[-300%] lg:translate-x-[-350%]':'scale-100'}">
         main chracter
 
     </button>
@@ -160,23 +160,25 @@
     {/each}
 
     {#if isZoomed}
-        <div
-            class="mb-24 flex flex-col">
-            <button
-                onclick={() => showAddDreamMenu = true}
-                class="rounded-2xl px-6 py-2 bg-blue-500 border border-slate-200">
-                Journal Dream
-            </button>
-            <button
-                class="rounded-2xl px-6 py-2 bg-blue-500 border border-slate-200">
-                Analyze Dreams
-            </button>
-            <button
-                class="rounded-2xl px-6 py-2 bg-blue-500 border border-slate-200">
-                Teleport to Garden
-            </button>
-            
-            
+        <div class="grid grid-cols-2 gap-4 w-full">
+            <div></div>
+            <div>
+                <div class="mb-24 flex flex-col items-center justify-center w-full h-screen">
+                    <button
+                        onclick={() => showAddDreamMenu = true}
+                        class="rounded-2xl px-6 py-2 bg-blue-500 border border-slate-200">
+                        Analyze Dreams
+                    </button>
+                    <button
+                        class="rounded-2xl px-6 py-2 bg-blue-500 border border-slate-200" onclick={function(){goto("myInfo")}}>
+                        Your Profile
+                    </button>
+                    <button
+                        class="rounded-2xl px-6 py-2 bg-blue-500 border border-slate-200">
+                        Teleport to Random Garden
+                    </button>
+                </div>
+            </div>
         </div>
     {/if}
 </main>

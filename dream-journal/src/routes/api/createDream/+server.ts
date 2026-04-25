@@ -27,7 +27,10 @@ type Document={
     _id:ObjectId
     username:string,
     password:string,
-    dreams:ObjectId[]
+    currentStreak:number,
+    longestStreak:number,
+    dreams:ObjectId[],
+    following:ObjectId[]
 }
 
 export const POST:RequestHandler=async({request})=>{

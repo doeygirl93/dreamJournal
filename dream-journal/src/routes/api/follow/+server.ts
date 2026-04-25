@@ -9,13 +9,13 @@ let db = client.db(DB);
 let coll = db.collection(USER_COLL);
 
 export const POST:RequestHandler=async({request})=>{
-    let { username, friendId } = await request.json();
+    let { username, friendUser } = await request.json();
     try{
         let found = await coll.findOne({username:username});
         if(found!=null){
             await coll.updateOne({username:username},{
                 $push:{
-                    friends:friendId
+                    friends:friendUser
                 }
             });
             return json({msg:"successfully added friend", success:true});
