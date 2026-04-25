@@ -2,6 +2,8 @@
     import { onMount } from "svelte";
     import axios from "axios";
 
+    import Comment from "$lib/comps/Comment.svelte";
+
     // mock data
     let mockUser = "12345";
     let mockPass = "";
@@ -22,7 +24,7 @@
         comment:string
     }
 
-    let dreamsRecord:Record<string,dream>={};
+    let dreamsRecord:Record<string,dream>=$state({});
 
     let dreamsArr:string[]=$state([]);
 
@@ -109,8 +111,44 @@
         }
     }
 
+    let displayDreamName:string=$state("");
+    let displayDreamSummary:string=$state("");
+    let displayDreamComments:comment[]=$state([]);
+    let commentsAvailable:string=$state("");
+
+    let dreamInfoVisible:string=$state("display:none");
+    let commentButton:any;
+
     function showInfo(id:string){
-        console.log(dreamsRecord[id]);
+        displayDreamName=dreamsRecord[id].name;
+        displayDreamSummary=dreamsRecord[id].summary;
+        displayDreamComments=dreamsRecord[id].comments;
+        if(dreamsRecord[id].comments.length==0){
+            commentsAvailable="No comments yet :(";
+        }
+        dreamInfoVisible="display:block";
+        commentButton.onclick=function(){postComment(id)};
+    }
+
+    function hideInfo(){
+        dreamInfoVisible="display:none";
+    }
+
+    let comment:any=$state("");
+
+    async function postComment(id:string){
+        if(comment!=""){
+            let response=(await axios.post("/api/addComment",{
+                id:id,
+                username:mockUser,
+                comment:comment
+            })).data;
+            if(response.success){
+                console.log("success!! yayy comment posted");
+            }else{
+                console.log("error", response.msg);
+            }
+        }
     }
 </script>
 
@@ -132,8 +170,20 @@
 
     </div>
 
-    <div class="absolute top-[50%] left-[50%] transform translate-x-[-50%] translate-y-[-50%] bg-blue-300 w-[80%] h-[80%]">
-        <button>close</button>
+    <div style={dreamInfoVisible} class="absolute top-[50%] left-[50%] transform translate-x-[-50%] translate-y-[-50%] bg-blue-300 w-[80%] h-[80%]">
+        <button onclick={hideInfo}>close</button>
+        <h3>{displayDreamName}</h3>
+        <p>{displayDreamSummary}</p>
+        <h4>Comments:</h4>
+        <h3>{commentsAvailable}</h3>
+        {#each displayDreamComments as comment}
+            <Comment commenterName={comment.name} comment={comment.comment}></Comment>
+        {/each}
+        <br>
+        <div>
+            <input type="text" class="bg-white" bind:value={comment}>
+            <button class="bg-blue-400" bind:this={commentButton}>post comment</button>
+        </div>
     </div>
 
     {#each dreamsArr as dreamId}
