@@ -20,6 +20,7 @@ export const POST:RequestHandler=async({request})=>{
             username:username,
             password:password,
             gardenIsPublic:false,
+            friends:[],
             dreams:[]
         });
         return json({msg:"success", success:true});

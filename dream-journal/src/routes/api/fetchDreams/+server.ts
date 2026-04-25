@@ -27,12 +27,13 @@ export const POST:RequestHandler=async({request})=>{
     let { username, password } = await request.json();
     try{
         let hashPass = bcrypt.hashSync(password, 10);
-        let found = await userColl.findOne({username:username, password:hashPass});
+        //let found = await userColl.findOne({username:username, password:hashPass}); -- put this back when done testing
+        let found = await userColl.findOne({username:username});
         if(found!=null){
             let dreamIds = found.dreams;
             let dreamRecord:Record<string, dream>={};
             for(let i in dreamIds){
-                let foundDream = await dreamsColl.findOne({_id:i});
+                let foundDream = await dreamsColl.findOne({_id:dreamIds[i]});
                 if(foundDream!=null){
                     dreamRecord[i]=foundDream;
                 }
