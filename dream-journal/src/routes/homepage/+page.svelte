@@ -36,25 +36,12 @@
         if(dreams.success){
             console.log("success!!!");
             dreamsRecord=dreams.dreams;
-            dreamsArr=Object.keys(dreamsRecord).reverse();
+            dreamsArr=Object.keys(dreamsRecord).toReversed();
         }else{
             console.log("not success...");
             console.log(dreams.msg)
         }
     });
-
-    let dreams = $state([
-    {
-        id: 1, 
-        name: "Toxic Yuri nightmare", 
-        desc: "i tried to turn a straight gurl gay but she ended up leaving me a for a man who didn't like me back :c", 
-        x: 20, y: 70,
-        comments: [
-            { id: 101, user: "Reem", text: "i fawkking hate toxic yuri fml" },
-            { id: 102, user: "Zrl", text: "ugh i had a nightmare i got stuck in a dream and faced twink death"}
-        ]
-    },
-]);
 
     // ts is what to determine if some parts of the UI show or now
     let isZoomed = $state(false);
@@ -66,29 +53,6 @@
     let dreamName = $state("");
     let dreamDesc = $state("");
     let dreamPublic = $state(false);
-
-    // basically the function that loop
-    function publishDreams() {
-        if (!dreamName || !dreamDesc) return; // returns if dream name or desc is empty
-
-        // data in each dream
-        const newFlower = {
-            id: Date.now(), //placeholder id
-            name: dreamName,
-            desc: dreamDesc,
-            x:Math.random(), //make it that it don't touch edges some how
-            y: Math.random(), // make it appear in bottem
-            comments: [] 
-        };
-
-        // updates list and adds the new dream
-        dreams = [...dreams, newFlower];
-        // clears up the stuff so that it shows up empty and ready for input next time
-
-        dreamName = "";
-        dreamDesc = "";
-        showAddDreamMenu = false;
-    }
     
     async function createDream(){
         if(dreamName==""){
@@ -122,7 +86,7 @@
     function showInfo(id:string){
         displayDreamName=dreamsRecord[id].name;
         displayDreamSummary=dreamsRecord[id].summary;
-        displayDreamComments=dreamsRecord[id].comments;
+        displayDreamComments=dreamsRecord[id].comments.toReversed();
         if(dreamsRecord[id].comments.length==0){
             commentsAvailable="No comments yet :(";
         }
@@ -132,6 +96,7 @@
 
     function hideInfo(){
         dreamInfoVisible="display:none";
+        comment="";
     }
 
     let comment:any=$state("");
@@ -139,12 +104,15 @@
     async function postComment(id:string){
         if(comment!=""){
             let response=(await axios.post("/api/addComment",{
-                id:id,
+                id:dreamsRecord[id]._id,
                 username:mockUser,
                 comment:comment
             })).data;
             if(response.success){
-                console.log("success!! yayy comment posted");
+                let tempComm:comment = {name:mockUser, comment:comment}
+                dreamsRecord[id].comments.push(tempComm);
+                displayDreamComments.unshift(tempComm);
+                comment="";
             }else{
                 console.log("error", response.msg);
             }
@@ -178,6 +146,7 @@
         <h3>{commentsAvailable}</h3>
         {#each displayDreamComments as comment}
             <Comment commenterName={comment.name} comment={comment.comment}></Comment>
+            <br>
         {/each}
         <br>
         <div>

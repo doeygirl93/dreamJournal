@@ -9,7 +9,7 @@ let db = client.db(DB);
 let coll:Collection<dream> = db.collection(DREAMS_COLL);
 
 type dream={
-    _id:string,
+    _id:ObjectId,
     name:string,
     summary:string,
     starColor:string,
@@ -25,13 +25,14 @@ type comment={
 export const POST:RequestHandler=async({request})=>{
     let { id, username, comment }=await request.json();
     try{
-        let found=await coll.findOne({_id:id});
+        let idObject = new ObjectId(id);
+        let found=await coll.findOne({_id:idObject});
         if(found!=null){
             let newComment:comment={
                 name:username,
                 comment:comment
             };
-            await coll.updateOne({_id:id},{
+            await coll.updateOne({_id:idObject},{
                 $push:{
                     comments:newComment
                 }
