@@ -5,9 +5,8 @@
     import Comment from "$lib/comps/Comment.svelte";
     import { goto } from "$app/navigation";
 
-    // mock data
-    let mockUser = "12345";
-    let mockPass = "";
+    let storageUser:string;
+    let storagePass:string;
 
     let creationErrMsg = $state("");
 
@@ -30,9 +29,18 @@
     let dreamsArr:string[]=$state([]);
 
     onMount(async ()=>{
+        let localStorageUser = localStorage.getItem("username");
+        let localStoragePass = localStorage.getItem("password");
+        if(localStorageUser!=null && localStoragePass!=null){
+            storageUser=localStorageUser;
+            storagePass=localStoragePass;
+        }else{
+            goto("/");
+        }
+        
         let dreams = (await axios.post("/api/fetchDreams",{
-            username:mockUser,
-            password:mockPass
+            username:storageUser,
+            password:storagePass
         })).data;
         if(dreams.success){
             console.log("success!!!");
@@ -62,8 +70,8 @@
             creationErrMsg="dream empty";
         }else{
             let response = (await axios.post("/api/createDream",{
-                username:mockUser,
-                password:mockPass,
+                username:storageUser,
+                password:storagePass,
                 name:dreamName,
                 summary:dreamDesc,
                 isPublic:dreamPublic
@@ -106,11 +114,11 @@
         if(comment!=""){
             let response=(await axios.post("/api/addComment",{
                 id:dreamsRecord[id]._id,
-                username:mockUser,
+                username:storageUser,
                 comment:comment
             })).data;
             if(response.success){
-                let tempComm:comment = {name:mockUser, comment:comment}
+                let tempComm:comment = {name:storageUser, comment:comment}
                 dreamsRecord[id].comments.push(tempComm);
                 displayDreamComments.unshift(tempComm);
                 comment="";

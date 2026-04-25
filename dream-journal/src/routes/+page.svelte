@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
     import axios from "axios";
 
     let loginUsername:string=$state("");
@@ -15,7 +16,9 @@
             })).data;
 
             if(response.success){
-                console.log("yay logged in");
+                localStorage.setItem("username",loginUsername);
+                localStorage.setItem("password", loginPassword);
+                goto("homepage");
             }else{
                 console.log(response.msg);
             }
@@ -29,7 +32,9 @@
                 password:signupPassword
             })).data;
             if(response.success){
-                console.log("acc created");
+                localStorage.setItem("username",signupUsername);
+                localStorage.setItem("password", signupPassword);
+                goto("homepage");
             }else{
                 console.log(response.msg);
             }
