@@ -16,7 +16,7 @@ export const POST:RequestHandler=async({request})=>{
             return json({msg:`User ${username} already exists`, success:false});
         }
         let hashPass = bcrypt.hashSync(password, 10);
-        coll.insertOne({
+        await coll.insertOne({
             username:username,
             password:hashPass,
             gardenIsPublic:false,

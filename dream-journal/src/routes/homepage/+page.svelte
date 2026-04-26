@@ -66,15 +66,16 @@
         }
     }
 
-    $effect(() => {
-        if (creationErrMsg) {
-            const timeout = setTimeout(() => {
-                creationErrMsg = ("");
-            }, 10000); // 10 seconds
-            return () => clearTimeout(timeout);
-         }
-     });
 
+    $effect(() => {
+    if (creationErrMsg) {
+      const timeout = setTimeout(() => {
+        creationErrMsg = ("");
+      }, 10000); // 10 seconds
+
+      return () => clearTimeout(timeout);
+    }
+  });
 
     // ts is what to determine if some parts of the UI show or now
     let starsDisplay = $state("display:block");
@@ -241,10 +242,10 @@
                         viewport={{ once: true }}
                         animate={{ scale: 1 }} 
                         whileHover={{ 
-                            scale: 0.9,
+                            scale: 1.1,
                             transition: { duration: 0.3 } }}
 
-                        whileTap={{scale: 1.1,}}
+                        whileTap={{scale: 0.8,}}
                         transition={{
                             duration: .2,
                             scale: { type: "spring", stiffness: 400, damping: 10 },
@@ -264,10 +265,10 @@
                             viewport={{ once: true }}
                             animate={{ scale: 1 }} 
                             whileHover={{ 
-                                scale: 0.9,
+                                scale: 1.1,
                                 transition: { duration: 0.3 } }}
 
-                            whileTap={{scale: 1.1,}}
+                            whileTap={{scale: 0.9,}}
                             transition={{
                                 duration: .2,
                                 scale: { type: "spring", stiffness: 400, damping: 10 },
@@ -278,7 +279,7 @@
                         </motion.button>
                         <br>
                         <motion.button
-                            class="pointer-events-auto rounded-2xl px-6 py-2 w-20% text-white border border-slate-200"
+                            class="pointer-events-auto rounded-2xl px-6 py-2 w-20% text-white border border-slate-200 shadow-2xl text-shadow-2xl backdrop-blur-[1px]"
                             initial={{ opacity: 0}}
                             whileInView={{ 
                                 opacity: 1,
@@ -287,16 +288,16 @@
                             viewport={{ once: true }}
                             animate={{ scale: 1 }} 
                             whileHover={{ 
-                                scale: 0.9,
+                                scale: 1.1,
                                 transition: { duration: 0.3 } }}
 
-                            whileTap={{scale: 1.1,}}
+                            whileTap={{scale: 0.9,}}
                             transition={{
                                 duration: .2,
                                 scale: { type: "spring", stiffness: 400, damping: 10 },
                                 default: { duration: 1 } 
                                 }}>
-                                <button onclick={function(){goto("myInfo")}}>
+                                <button onclick={function(){goto("/myInfo")}}>
                                     Your Profile
                                 </button>
                         </motion.button>
@@ -306,6 +307,46 @@
                     </div>
                 </div>
         {/if}
+
+
+
+
+        {#if showAddDreamMenu}
+            <div class="absolute top-[50%] left-[50%] transform translate-x-[-50%] translate-y-[-50%] w-[30%] h-[75%] bg-blue-950 rounded-t-4xl border-4 border-white/20">
+
+            <button class="absolute top-2 right-4 text-xl bg-teal-400/50 rounded-full px-4 py-1 font-extrabold font-stretch-50% text-yellow-400 transition-all duration-1000 hover:scale-110 active:scale-90
+            " onclick={() => showAddDreamMenu = false}> 
+                X
+            </button>
+            <h2 class="text-3xl mb-8 font-bold mt-5 font-sans text-white tracking-wider">New Dream Entry</h2>
+
+            <div class="px-5 flex flex-col gap-2 text-left text-white tracking-wider">
+                <h3 class="text-xl font-semibold"> Dream Name</h3>
+                <input type="text" class="p-2 rounded bg-slate-700 border border-slate-500" placeholder="Title Your Dream  . . ." id="name" bind:value={dreamName}>
+                <h3 class="text-xl font-semibold"> The Details. . </h3>
+                <textarea name="content" rows="8" cols="50" placeholder="Describe Your Dream" id="content" bind:value={dreamDesc} class="p-2 rounded bg-slate-700 border border-slate-500"></textarea>
+            </div>
+
+            <div class=" p-4 flex items-center gap-4 mt-6">
+                <input type="checkbox" name="visibility" id="visibility" onchange={function(){this.checked==true?dreamPublic=true:dreamPublic=false}}>
+                <label for="visibility"
+                class="text-white tracking-widest">Make this dream public?</label>
+            </div>
+            <button class="mt-4 bg-blue-600/40 hover:bg-blue-900 rounded-full border boder-white/10 px-4 py-1 text-white/90 transition-all duration-1000 hover:scale-110 active:scale-90 py-2 rounded-lg font-bold transition-colors"onclick={createDream}>Create</button>
+
+            <div class="absolute top-65/64 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                {#if creationErrMsg}
+
+
+                    <p class="text-red-600 text-sm mt-2 underline">{creationErrMsg}</p>
+                {/if}
+            </div>
+        </div>
+{/if}
+        
+
+            
+
     </main>
 </div>
 
