@@ -55,9 +55,9 @@
             for(let i = 0; i < Object.keys(dreamsRecord).length;i++){
                 let choice=Math.floor(Math.random()*2);
                 if(choice==1){
-                    dreamsArr1.push(Object.keys(dreamsRecord[i]));
+                    dreamsArr1.push(Object.keys(dreamsRecord)[i]);
                 }else{
-                    dreamsArr2.push(Object.keys(dreamsRecord[i]));
+                    dreamsArr2.push(Object.keys(dreamsRecord)[i]);
                 }
             }
         }else{
@@ -65,6 +65,16 @@
             console.log(dreams.msg)
         }
     }
+
+    $effect(() => {
+        if (creationErrMsg) {
+            const timeout = setTimeout(() => {
+                creationErrMsg = ("");
+            }, 10000); // 10 seconds
+            return () => clearTimeout(timeout);
+         }
+     });
+
 
     // ts is what to determine if some parts of the UI show or now
     let isZoomed = $state(false);
@@ -180,14 +190,14 @@
 
 <div class="w-[100%] h-[100%] text-center box-border p-[15px]">
     <main class="relative w-full h-screen overflow-hidden font-sans text-center box-border p-[10px]">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
-            <div onclick={() => isZoomed = true} class = "transition-all duration-1500 ease-in-out transform flex items-center justify-center text-4xl {isZoomed ? 'scale-[3] translate-y-[-10%] translate-x-[-95%] md:translate-x-[-200%] lg:translate-x-[-350%]':'scale-100'}">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center md:pl-10rem">
+            <div onclick={() => isZoomed = true} class = "transition-all duration-1500 ease-in-out transform flex items-center justify-center text-4xl {isZoomed ? 'scale-[1.125] translate-y-[-5%] translate-x-[-32%] md:translate-x-[-48%] lg:translate-x-[-64%]':'scale-100'}">
                 <img src={lightver} class="mt-[40%] w-[90%]">
             </div>
 
         </div>
 
-        <div style={dreamInfoVisible} class="absolute top-[50%] left-[50%] transform translate-x-[-50%] translate-y-[-50%] bg-blue-300 w-[80%] h-[80%]">
+        <div style={`${dreamInfoVisible}; z-index:5`} class="absolute top-[50%] left-[50%] transform translate-x-[-50%] translate-y-[-50%] bg-blue-300 w-[80%] h-[80%]">
             <button onclick={hideInfo}>close</button>
             <h3>{displayDreamName}</h3>
             <p>{displayDreamSummary}</p>
@@ -212,7 +222,8 @@
                     use:clickOutside={() => isZoomed = false} 
                     style={menuButtonsVisibility} class="col-span-2 mb-24 flex flex-col items-right justify-center w-full h-screen text-xl md:text-3xl pointer-events-none">
                                                 <motion.button
-                        class="pointer-events-auto rounded-2xl px-6 py-2 w-20% text-white border border-slate-200"
+                        class="pointer-events-auto rounded-2xl px-6 py-2 w-20% text-white border border-slate-200 shadow-2xl text-shadow-2xl backdrop-blur-[1px]"
+                        onclick={() => showAddDreamMenu = true}
                         initial={{ opacity: 0}}
                         whileInView={{ 
                             opacity: 1,
@@ -253,7 +264,7 @@
                                 scale: { type: "spring", stiffness: 400, damping: 10 },
                                 default: { duration: 1 } 
                                 }}
-                            class="pointer-events-auto rounded-2xl px-6 py-2 w-20% text-white border border-slate-200">
+                            class="pointer-events-auto rounded-2xl px-6 py-2 w-20% text-white border border-slate-200 shadow-2xl text-shadow-2xl backdrop-blur-[1px]">
                             Analyze Dreams
                         </motion.button>
                         <br>
@@ -291,13 +302,13 @@
 
 <div class="w-[30%] h-[100%] absolute top-0">
     {#each dreamsArr1 as dreamId}
-        <button class="w-[50px] h-[50px] m-[50px] bg-[#F3EDFF] rounded-full" style={` box-shadow: 0 0 20px #E0DBFF; position:absolute; top: ${10+Math.random()*50}%; left: ${10+Math.random()*50}%;`} onclick={function(){showInfo(dreamId)}}></button>
+        <button class="w-[50px] h-[50px] m-[50px] bg-[#F3EDFF] rounded-full text-white" style={` box-shadow: 0 0 20px #E0DBFF; position:absolute; top: ${10+Math.random()*50}%; left: ${10+Math.random()*50}%;`} onclick={function(){showInfo(dreamId)}}>.</button>
     {/each}
 </div>
 
 <div class="w-[30%] h-[100%] absolute top-0 right-0">
     {#each dreamsArr2 as dreamId}
-        <button class="w-[50px] h-[50px] m-[50px] bg-[#F3EDFF] rounded-full" style={` box-shadow: 0 0 20px #E0DBFF; position:absolute; top: ${10+Math.random()*50}%; left: ${10+Math.random()*50}%;`} onclick={function(){showInfo(dreamId)}}></button>
+        <button class="w-[50px] h-[50px] m-[50px] bg-[#F3EDFF] rounded-full text-white" style={` box-shadow: 0 0 20px #E0DBFF; position:absolute; top: ${10+Math.random()*50}%; left: ${10+Math.random()*50}%;`} onclick={function(){showInfo(dreamId)}}>.</button>
     {/each}
 </div>
 
