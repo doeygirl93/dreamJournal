@@ -77,6 +77,7 @@
 
 
     // ts is what to determine if some parts of the UI show or now
+    let starsDisplay = $state("display:block");
     let isZoomed = $state(false);
     let showAddDreamMenu = $state(false);
     let selectFlower = $state(null); // fow the spefic flower u wanna zoom/clicl in on
@@ -179,7 +180,15 @@
         analysisVisiblity="display:block";
     }
 
+    function isZoomedTrue(){
+        isZoomed=true;
+        starsDisplay="display:none";
+    }
 
+    function zoomFalse(){
+        isZoomed=false;
+        starsDisplay="display:block";
+    }
 
 </script>
 
@@ -191,7 +200,7 @@
 <div class="w-[100%] h-[100%] text-center box-border p-[15px]">
     <main class="relative w-full h-screen overflow-hidden font-sans text-center box-border p-[10px]">
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center md:pl-10rem">
-            <div onclick={() => isZoomed = true} class = "transition-all duration-1500 ease-in-out transform flex items-center justify-center text-4xl {isZoomed ? 'scale-[1.125] translate-y-[-5%] translate-x-[-32%] md:translate-x-[-48%] lg:translate-x-[-64%]':'scale-100'}">
+            <div onclick={isZoomedTrue} class = "transition-all duration-1500 ease-in-out transform flex items-center justify-center text-4xl {isZoomed ? 'scale-[1.125] translate-y-[-5%] translate-x-[-32%] md:translate-x-[-48%] lg:translate-x-[-64%]':'scale-100'}">
                 <img src={lightver} class="mt-[40%] w-[90%]">
             </div>
 
@@ -219,7 +228,7 @@
                 <div class="col-span-4"></div>
 
                     <div 
-                    use:clickOutside={() => isZoomed = false} 
+                    use:clickOutside={zoomFalse} 
                     style={menuButtonsVisibility} class="col-span-2 mb-24 flex flex-col items-right justify-center w-full h-screen text-xl md:text-3xl pointer-events-none">
                                                 <motion.button
                         class="pointer-events-auto rounded-2xl px-6 py-2 w-20% text-white border border-slate-200 shadow-2xl text-shadow-2xl backdrop-blur-[1px]"
@@ -300,16 +309,18 @@
     </main>
 </div>
 
-<div class="w-[30%] h-[100%] absolute top-0">
+<div style={starsDisplay}>
+    <div class="w-[30%] h-[100%] absolute top-0">
     {#each dreamsArr1 as dreamId}
         <button class="w-[50px] h-[50px] m-[50px] bg-[#F3EDFF] rounded-full text-white" style={` box-shadow: 0 0 20px #E0DBFF; position:absolute; top: ${10+Math.random()*50}%; left: ${10+Math.random()*50}%;`} onclick={function(){showInfo(dreamId)}}>.</button>
     {/each}
 </div>
 
-<div class="w-[30%] h-[100%] absolute top-0 right-0">
-    {#each dreamsArr2 as dreamId}
-        <button class="w-[50px] h-[50px] m-[50px] bg-[#F3EDFF] rounded-full text-white" style={` box-shadow: 0 0 20px #E0DBFF; position:absolute; top: ${10+Math.random()*50}%; left: ${10+Math.random()*50}%;`} onclick={function(){showInfo(dreamId)}}>.</button>
-    {/each}
+    <div class="w-[30%] h-[100%] absolute top-0 right-0">
+        {#each dreamsArr2 as dreamId}
+            <button class="w-[50px] h-[50px] m-[50px] bg-[#F3EDFF] rounded-full text-white" style={` box-shadow: 0 0 20px #E0DBFF; position:absolute; top: ${10+Math.random()*50}%; left: ${10+Math.random()*50}%;`} onclick={function(){showInfo(dreamId)}}>.</button>
+        {/each}
+    </div>
 </div>
 
 <div class="bg-gradient-to-b from-[#0B0B1F] from-[0%] via-[#242A52] via-[60%] via-[#34346B] via-[100%] absolute top-[50%] left-[50%] w-[100%] h-[100%] transform translate-x-[-50%] translate-y-[-50%]" style="z-index:-1">
