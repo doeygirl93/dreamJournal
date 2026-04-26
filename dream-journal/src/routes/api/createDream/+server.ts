@@ -34,10 +34,8 @@ type Document={
 }
 
 export const POST:RequestHandler=async({request})=>{
-    let { username, password, name, summary, isPublic } = await request.json();
+    let { username, name, summary, isPublic } = await request.json();
     try{
-        let hashPass = bcrypt.hashSync(password, 10);
-        //let found = await userColl.findOne({username:username, password:hashPass}); -- put this back when done testing
         let found = await userColl.findOne({username:username});
         if(found!=null){
             let createdDream = {

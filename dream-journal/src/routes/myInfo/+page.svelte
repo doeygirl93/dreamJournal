@@ -3,7 +3,7 @@
     import axios from "axios";
     import { onMount } from "svelte";
 
-    let mockUser="12345";
+    let storageUser="12345";
 
     let dreamerProfileVisible:string=$state("display:block");
     let settingsVisible:string=$state("display:none");
@@ -13,8 +13,10 @@
     let entriesRecorded:string=$state("");
 
     onMount(async ()=>{
+        let localStorageUser = localStorage.getItem("username");
+        localStorageUser!=null?storageUser=localStorageUser:goto("/");
         let response=(await axios.post("/api/fetchUserInfo",{
-            username:mockUser
+            username:storageUser
         })).data;
         if(response.success){
             currentStreak=response.userInfo.currentStreak;

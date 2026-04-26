@@ -6,7 +6,6 @@
     import { goto } from "$app/navigation";
 
     let storageUser:string;
-    let storagePass:string;
 
     let creationErrMsg = $state("");
 
@@ -30,17 +29,14 @@
 
     onMount(async ()=>{
         let localStorageUser = localStorage.getItem("username");
-        let localStoragePass = localStorage.getItem("password");
-        if(localStorageUser!=null && localStoragePass!=null){
-            storageUser=localStorageUser;
-            storagePass=localStoragePass;
-        }else{
-            goto("/");
-        }
+        localStorageUser!=null?storageUser=localStorageUser:goto("/");
         
+        await dreamDisplay();
+    });
+
+    async function dreamDisplay(){
         let dreams = (await axios.post("/api/fetchDreams",{
-            username:storageUser,
-            password:storagePass
+            username:storageUser
         })).data;
         if(dreams.success){
             console.log("success!!!");
@@ -50,7 +46,7 @@
             console.log("not success...");
             console.log(dreams.msg)
         }
-    });
+    }
 
     // ts is what to determine if some parts of the UI show or now
     let isZoomed = $state(false);
@@ -71,13 +67,14 @@
         }else{
             let response = (await axios.post("/api/createDream",{
                 username:storageUser,
-                password:storagePass,
                 name:dreamName,
                 summary:dreamDesc,
                 isPublic:dreamPublic
             })).data;
             if(response.success){
-                console.log("successfully created!!!");
+                dreamName="";
+                dreamDesc="";
+                await dreamDisplay();
             }else{
                 console.log(response.msg);
             }
