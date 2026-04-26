@@ -31,7 +31,8 @@
 
     let dreamsRecord:Record<string,dream>=$state({});
 
-    let dreamsArr:string[]=$state([]);
+    let dreamsArr1:any[]=$state([]);
+    let dreamsArr2:any[]=$state([]);
 
     let analysis:any=$state("");
 
@@ -51,7 +52,14 @@
         if(dreams.success){
             console.log("success!!!");
             dreamsRecord=dreams.dreams;
-            dreamsArr=Object.keys(dreamsRecord).toReversed();
+            for(let i = 0; i < Object.keys(dreamsRecord).length;i++){
+                let choice=Math.floor(Math.random()*2);
+                if(choice==1){
+                    dreamsArr1.push(Object.keys(dreamsRecord[i]));
+                }else{
+                    dreamsArr2.push(Object.keys(dreamsRecord[i]));
+                }
+            }
         }else{
             console.log("not success...");
             console.log(dreams.msg)
@@ -143,7 +151,7 @@
     async function analyzePatterns(){
         analysis="...thinking...";
         let entriesString:string="";
-        for(let i=0;i<dreamsArr.length;i++){
+        for(let i=0;i<Object.keys(dreamsRecord).length;i++){
             entriesString+=`${dreamsRecord[i.toString()].summary}\n\n`;
         }
         let response = (await axios.post("/api/analyzeDreams",{dreams:entriesString})).data;
@@ -281,34 +289,16 @@
     </main>
 </div>
 
-<div class="w-[30%] h-[100%] bg-red-500 absolute top-0 grid grid-cols-3 grid-rows-4">
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
+<div class="w-[30%] h-[100%] absolute top-0">
+    {#each dreamsArr1 as dreamId}
+        <button class="w-[50px] h-[50px] m-[50px] bg-[#F3EDFF] rounded-full" style={` box-shadow: 0 0 20px #E0DBFF; position:absolute; top: ${10+Math.random()*50}%; left: ${10+Math.random()*50}%;`} onclick={function(){showInfo(dreamId)}}></button>
+    {/each}
 </div>
 
-<div class="w-[30%] h-[100%] bg-red-500 absolute top-0 right-0 grid grid-cols-3 grid-rows-4">
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
+<div class="w-[30%] h-[100%] absolute top-0 right-0">
+    {#each dreamsArr2 as dreamId}
+        <button class="w-[50px] h-[50px] m-[50px] bg-[#F3EDFF] rounded-full" style={` box-shadow: 0 0 20px #E0DBFF; position:absolute; top: ${10+Math.random()*50}%; left: ${10+Math.random()*50}%;`} onclick={function(){showInfo(dreamId)}}></button>
+    {/each}
 </div>
 
 <div class="bg-gradient-to-b from-[#0B0B1F] from-[0%] via-[#242A52] via-[60%] via-[#34346B] via-[100%] absolute top-[50%] left-[50%] w-[100%] h-[100%] transform translate-x-[-50%] translate-y-[-50%]" style="z-index:-1">
