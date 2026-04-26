@@ -211,12 +211,13 @@
 
         </div>
 
-        <div style={`${dreamInfoVisible}; z-index:5`} class="absolute top-[50%] left-[50%] transform translate-x-[-50%] translate-y-[-50%] bg-blue-300 w-[80%] h-[80%]">
-            <button onclick={hideInfo}>close</button>
-            <h3>{displayDreamName}</h3>
-            <p>{displayDreamSummary}</p>
-            <h4>Comments:</h4>
-            <h3>{commentsAvailable}</h3>
+        <div style={`${dreamInfoVisible}; z-index:5`} class="border-box p-[15px] text-left bg-[#241D2B] border-[1px] border-white absolute top-[50%] left-[50%] transform translate-x-[-50%] translate-y-[-50%] w-[80%] h-[80%]">
+            <button onclick={hideInfo} class="text-white">close</button>
+            <br>
+            <h3 class="text-white text-center">Dream name: {displayDreamName}</h3>
+            <p class="text-white text-center">Dream summary: {displayDreamSummary}</p>
+            <h4 class="text-white">Comments:</h4>
+            <h3 class="text-white">{commentsAvailable}</h3>
             {#each displayDreamComments as comment}
                 <Comment commenterName={comment.name} comment={comment.comment}></Comment>
                 <br>

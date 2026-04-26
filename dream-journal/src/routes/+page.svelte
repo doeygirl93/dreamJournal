@@ -43,64 +43,150 @@
     }
 </script>
 
-<div class="w-full h-screen flex flex-col items-center justify-center backdrop-saturate-150 font-sans">
-
-
-    <div class="fixed inset-0 w-screen h-screen -z-10">
-
-        <img
-        src='/shoot_stars.png'
-        alt="Background" 
-        class="object-csover object-center w-full h-full bg-cover"
-        />
-        
-    </div>
-            <div class=" mt-10 w-[40%] h-[50%] bg-white/15 backdrop-blur-[1.5px] border border-white/30 rounded-xl grid grid-row-4">
-                <!-- Header-->
-                <div class=" pt-4 px-9 flex flex-col items-center justify-center">
-                    <h1 class="text-6xl text-white/90 font-semibold tracking-widest"> Login </h1>
-                </div>
-
-                <!-- Username place-->
-                <div class=" px-9 flex flex-col items-right justify-center">
-                    <h2 class="text-3xl text-white/90 font-semibold tracking-tighter"> Enter UserName </h2>
-                    <input 
-                    type="text" 
-                    placeholder="     username     "
-                     bind:value={loginUsername}
-                     class="mt-4 border-4 border-dotted border-purple-950/60 w-[60%] rounded-3xl"
-                     >
-                </div>
-                <!-- Password palce-->
-                <div class=" px-9 flex flex-col items-right justify-center">
-                    <h2 class="text-3xl text-white/90 font-semibold tracking-tighter"> Enter PassWord </h2>
-                    <input 
-                    type="password"
-                     placeholder="password" 
-                     bind:value={loginPassword}
-                     class="mt-4 border-4 border-dotted border-purple-950/60 w-[60%] rounded-3xl"
-                     >
-                </div>
-
-
-                <!-- Signup button-->
-                <div>
-                    <button 
-                    onclick={login}
-                    class="bg-amber-50 rounded-full hover:scale-120 active:scale-75"
-                    >Log In!</button>
-
-                    <button 
-                    onclick={signup}
-                    class="bg-amber-50 rounded-full hover:scale-120 active:scale-75"
-                    >
-                    sign up
-                </button>
-        
-                </div>
-
-
-                </div>
-
-            
+<div class="body">
+    <div class="signlog">
+            <div>
+                <h1 class="loginbig">Log In</h1>
+                <p>Username</p>
+                <input type="text" placeholder="username" bind:value={loginUsername}>
+                <p>Password</p>
+                <input type="password" placeholder="password" bind:value={loginPassword}>
+                <button onclick={login}>Log In!</button>
+                <a href="signup.html">Or sign up!</a>
             </div>
+        </div>
+
+        <div class="signlog">
+            <div>
+            <h1>Name</h1>
+            <input type="text" placeholder="name" bind:value={signupUsername}>
+            <h1>Password</h1>
+            <input type="password" placeholder="password" bind:value={signupPassword}>
+            <button onclick={signup}>sign up</button>
+        </div>
+
+        </div>
+
+        </div>
+
+<style>
+body{
+    margin:0%;
+    font-family:sans-serif;
+}
+
+.signlog{
+    display:flex;
+    justify-content: center;
+    height:100vh;
+    width:100vw;
+    gap:3%;
+    flex-direction: column;
+    align-items: center;
+    background: #733535;
+    background: linear-gradient(360deg, rgba(115, 53, 53, 1) 0%, rgba(94, 45, 117, 1) 38%, rgba(14, 38, 99, 1) 100%);
+
+}
+
+.signlog > *{
+    padding:7%;
+    border-color:rgb(244, 244, 244);;
+    border-radius:20%;
+    border-style:solid;
+    border-width:5px;
+    width:fit-content;
+    height:fit-content;
+    background-color:#d8fffe95;
+    opacity:0.4;
+    transition:transform 500ms ease-in-out;
+}
+
+/*.signlog >* >*:hover{
+    transform:scale(1.05);
+
+}
+    */
+
+.signlog>*>*>*:hover{
+    transform:scale(1.05);
+
+}
+
+.signlog >*>*{
+    display:flex;
+    flex-direction: column;
+    row-gap: 10px;
+
+}
+
+.signlog >* h1{
+    font-size:60px;
+
+}
+
+.login{
+    margin:5% 0% 5% 0%;
+    border-radius:10px;
+    box-shadow: 0px 0px 6px 1px;
+    background-color:white;
+
+}
+
+.loggin{
+    margin-top:15%;
+    
+
+}
+
+button{
+    text-decoration:none;
+    border:none;
+    background:none;
+    font-size:45px;
+    opacity:1;
+}
+
+.star1{
+    width:2px;
+    height:2px;
+    border-radius:100%;
+    animation: twinkle ease-in-out infinite;
+    box-shadow: 0px 0px 6px 1px;
+}
+
+.star2{
+    width:4px;
+    height:4px;
+    border-radius:100%;
+    box-shadow: 0px 0px 6px 1px;
+    animation: twinkle ease-in-out infinite;
+
+}
+
+.star3{
+    width:6px;
+    height:6px;
+    border-radius:100%;
+    box-shadow: 0px 0px 6px 1px;
+    animation: twinkle ease-in-out infinite;
+
+}
+
+@keyframes twinkle{
+    50%{opacity:0;}
+}
+
+input{
+    background-color:rgba(255, 255, 255, 0.523);
+    border-radius:10px;
+    margin-left:10px;
+    padding:5px;
+
+}
+
+.loginbig{
+    color:blue;
+    
+}
+
+</style>
