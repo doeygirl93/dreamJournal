@@ -31,7 +31,8 @@
 
     let dreamsRecord:Record<string,dream>=$state({});
 
-    let dreamsArr:string[]=$state([]);
+    let dreamsArr1:any[]=$state([]);
+    let dreamsArr2:any[]=$state([]);
 
     let analysis:any=$state("");
 
@@ -51,7 +52,14 @@
         if(dreams.success){
             console.log("success!!!");
             dreamsRecord=dreams.dreams;
-            dreamsArr=Object.keys(dreamsRecord).toReversed();
+            for(let i = 0; i < Object.keys(dreamsRecord).length;i++){
+                let choice=Math.floor(Math.random()*2);
+                if(choice==1){
+                    dreamsArr1.push(Object.keys(dreamsRecord[i]));
+                }else{
+                    dreamsArr2.push(Object.keys(dreamsRecord[i]));
+                }
+            }
         }else{
             console.log("not success...");
             console.log(dreams.msg)
@@ -154,7 +162,7 @@
     async function analyzePatterns(){
         analysis="...thinking...";
         let entriesString:string="";
-        for(let i=0;i<dreamsArr.length;i++){
+        for(let i=0;i<Object.keys(dreamsRecord).length;i++){
             entriesString+=`${dreamsRecord[i.toString()].summary}\n\n`;
         }
         let response = (await axios.post("/api/analyzeDreams",{dreams:entriesString})).data;
