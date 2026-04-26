@@ -58,6 +58,17 @@
         }
     }
 
+
+    $effect(() => {
+    if (creationErrMsg) {
+      const timeout = setTimeout(() => {
+        creationErrMsg = ("");
+      }, 10000); // 10 seconds
+
+      return () => clearTimeout(timeout);
+    }
+  });
+
     // ts is what to determine if some parts of the UI show or now
     let isZoomed = $state(false);
     let showAddDreamMenu = $state(false);
@@ -172,8 +183,8 @@
 
 <div class="w-[100%] h-[100%] text-center box-border p-[15px]">
     <main class="relative w-full h-screen overflow-hidden font-sans text-center box-border p-[10px]">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
-            <div onclick={() => isZoomed = true} class = "transition-all duration-1500 ease-in-out transform flex items-center justify-center text-4xl {isZoomed ? 'scale-[3] translate-y-[-10%] translate-x-[-95%] md:translate-x-[-200%] lg:translate-x-[-350%]':'scale-100'}">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center md:pl-10rem">
+            <div onclick={() => isZoomed = true} class = "transition-all duration-1500 ease-in-out transform flex items-center justify-center text-4xl {isZoomed ? 'scale-[1.125] translate-y-[-5%] translate-x-[-32%] md:translate-x-[-48%] lg:translate-x-[-64%]':'scale-100'}">
                 <img src={lightver} class="mt-[40%] w-[90%]">
             </div>
 
@@ -204,7 +215,8 @@
                     use:clickOutside={() => isZoomed = false} 
                     style={menuButtonsVisibility} class="col-span-2 mb-24 flex flex-col items-right justify-center w-full h-screen text-xl md:text-3xl pointer-events-none">
                                                 <motion.button
-                        class="pointer-events-auto rounded-2xl px-6 py-2 w-20% text-white border border-slate-200"
+                        class="pointer-events-auto rounded-2xl px-6 py-2 w-20% text-white border border-slate-200 shadow-2xl text-shadow-2xl backdrop-blur-[1px]"
+                        onclick={() => showAddDreamMenu = true}
                         initial={{ opacity: 0}}
                         whileInView={{ 
                             opacity: 1,
@@ -213,10 +225,10 @@
                         viewport={{ once: true }}
                         animate={{ scale: 1 }} 
                         whileHover={{ 
-                            scale: 0.9,
+                            scale: 1.1,
                             transition: { duration: 0.3 } }}
 
-                        whileTap={{scale: 1.1,}}
+                        whileTap={{scale: 0.8,}}
                         transition={{
                             duration: .2,
                             scale: { type: "spring", stiffness: 400, damping: 10 },
@@ -236,21 +248,21 @@
                             viewport={{ once: true }}
                             animate={{ scale: 1 }} 
                             whileHover={{ 
-                                scale: 0.9,
+                                scale: 1.1,
                                 transition: { duration: 0.3 } }}
 
-                            whileTap={{scale: 1.1,}}
+                            whileTap={{scale: 0.9,}}
                             transition={{
                                 duration: .2,
                                 scale: { type: "spring", stiffness: 400, damping: 10 },
                                 default: { duration: 1 } 
                                 }}
-                            class="pointer-events-auto rounded-2xl px-6 py-2 w-20% text-white border border-slate-200">
+                            class="pointer-events-auto rounded-2xl px-6 py-2 w-20% text-white border border-slate-200 shadow-2xl text-shadow-2xl backdrop-blur-[1px]">
                             Analyze Dreams
                         </motion.button>
                         <br>
                         <motion.button
-                            class="pointer-events-auto rounded-2xl px-6 py-2 w-20% text-white border border-slate-200"
+                            class="pointer-events-auto rounded-2xl px-6 py-2 w-20% text-white border border-slate-200 shadow-2xl text-shadow-2xl backdrop-blur-[1px]"
                             initial={{ opacity: 0}}
                             whileInView={{ 
                                 opacity: 1,
@@ -259,16 +271,16 @@
                             viewport={{ once: true }}
                             animate={{ scale: 1 }} 
                             whileHover={{ 
-                                scale: 0.9,
+                                scale: 1.1,
                                 transition: { duration: 0.3 } }}
 
-                            whileTap={{scale: 1.1,}}
+                            whileTap={{scale: 0.9,}}
                             transition={{
                                 duration: .2,
                                 scale: { type: "spring", stiffness: 400, damping: 10 },
                                 default: { duration: 1 } 
                                 }}>
-                                <button onclick={function(){goto("myInfo")}}>
+                                <button onclick={function(){goto("/myInfo")}}>
                                     Your Profile
                                 </button>
                         </motion.button>
@@ -278,38 +290,50 @@
                     </div>
                 </div>
         {/if}
+
+
+
+
+        {#if showAddDreamMenu}
+            <div class="absolute top-[50%] left-[50%] transform translate-x-[-50%] translate-y-[-50%] w-[30%] h-[75%] bg-blue-950 rounded-t-4xl border-4 border-white/20">
+
+            <button class="absolute top-2 right-4 text-xl bg-teal-400/50 rounded-full px-4 py-1 font-extrabold font-stretch-50% text-yellow-400 transition-all duration-1000 hover:scale-110 active:scale-90
+            " onclick={() => showAddDreamMenu = false}> 
+                X
+            </button>
+            <h2 class="text-3xl mb-8 font-bold mt-5 font-sans text-white tracking-wider">New Dream Entry</h2>
+
+            <div class="px-5 flex flex-col gap-2 text-left text-white tracking-wider">
+                <h3 class="text-xl font-semibold"> Dream Name</h3>
+                <input type="text" class="p-2 rounded bg-slate-700 border border-slate-500" placeholder="Title Your Dream  . . ." id="name" bind:value={dreamName}>
+                <h3 class="text-xl font-semibold"> The Details. . </h3>
+                <textarea name="content" rows="8" cols="50" placeholder="Describe Your Dream" id="content" bind:value={dreamDesc} class="p-2 rounded bg-slate-700 border border-slate-500"></textarea>
+            </div>
+
+            <div class=" p-4 flex items-center gap-4 mt-6">
+                <input type="checkbox" name="visibility" id="visibility" onchange={function(){this.checked==true?dreamPublic=true:dreamPublic=false}}>
+                <label for="visibility"
+                class="text-white tracking-widest">Make this dream public?</label>
+            </div>
+            <button class="mt-4 bg-blue-600/40 hover:bg-blue-900 rounded-full border boder-white/10 px-4 py-1 text-white/90 transition-all duration-1000 hover:scale-110 active:scale-90 py-2 rounded-lg font-bold transition-colors"onclick={createDream}>Create</button>
+
+            <div class="absolute top-65/64 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                {#if creationErrMsg}
+
+
+                    <p class="text-red-600 text-sm mt-2 underline">{creationErrMsg}</p>
+                {/if}
+            </div>
+        </div>
+{/if}
+        
+
+            
+
     </main>
 </div>
 
-<div class="w-[30%] h-[100%] bg-red-500 absolute top-0 grid grid-cols-3 grid-rows-4">
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-</div>
 
-<div class="w-[30%] h-[100%] bg-red-500 absolute top-0 right-0 grid grid-cols-3 grid-rows-4">
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-</div>
 
 <div class="bg-gradient-to-b from-[#0B0B1F] from-[0%] via-[#242A52] via-[60%] via-[#34346B] via-[100%] absolute top-[50%] left-[50%] w-[100%] h-[100%] transform translate-x-[-50%] translate-y-[-50%]" style="z-index:-1">
     <div class="bg-animation">
