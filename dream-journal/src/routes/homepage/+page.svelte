@@ -27,11 +27,15 @@
 
     let dreamsArr:string[]=$state([]);
 
+    let analysis:any=$state("");
+
     onMount(async ()=>{
         let localStorageUser = localStorage.getItem("username");
         localStorageUser!=null?storageUser=localStorageUser:goto("/");
-        
-        await dreamDisplay();
+        await dreamDisplay()
+        .then(async ()=>{
+            localStorage.getItem("lucidAnalysis")!=null?analysis=localStorage.getItem("lucidAnalysis"):await analyzePatterns();
+        });
     });
 
     async function dreamDisplay(){
@@ -58,6 +62,9 @@
     let dreamName = $state("");
     let dreamDesc = $state("");
     let dreamPublic = $state(false);
+
+    let menuButtonsVisibility:string=$state("display:flex");
+    let analysisVisiblity:string=$state("display:none");
     
     async function createDream(){
         if(dreamName==""){
@@ -124,6 +131,27 @@
             }
         }
     }
+
+    async function analyzePatterns(){
+        analysis="...thinking...";
+        let entriesString:string="";
+        for(let i=0;i<dreamsArr.length;i++){
+            entriesString+=`${dreamsRecord[i.toString()].summary}\n\n`;
+        }
+        let response = (await axios.post("/api/analyzeDreams",{dreams:entriesString})).data;
+        if(response.success){
+            analysis=response.patternAnalysis;
+            localStorage.setItem("lucidAnalysis", analysis);
+            console.log("set local storage");
+        }else{
+            analysis=response.msg;
+        }
+    }
+
+    function showPatterns(){
+        menuButtonsVisibility="display:none";
+        analysisVisiblity="display:block";
+    }
 </script>
 
 <svelte:head>
@@ -165,12 +193,12 @@
     {/each}
 
     {#if isZoomed}
-        <div class="grid grid-cols-2 gap-4 w-full">
+        <div class="grid grid-cols-2 gap-4 w-full" >
             <div></div>
             <div>
-                <div class="mb-24 flex flex-col items-center justify-center w-full h-screen">
+                <div style={menuButtonsVisibility} class="mb-24 flex-col items-center justify-center w-full h-screen">
                     <button
-                        onclick={() => showAddDreamMenu = true}
+                        onclick={showPatterns}
                         class="rounded-2xl px-6 py-2 bg-blue-500 border border-slate-200">
                         Analyze Dreams
                     </button>
@@ -182,6 +210,9 @@
                         class="rounded-2xl px-6 py-2 bg-blue-500 border border-slate-200">
                         Teleport to Random Garden
                     </button>
+                </div>
+                <div style={analysisVisiblity}>
+                    <p>{analysis}</p>
                 </div>
             </div>
         </div>
