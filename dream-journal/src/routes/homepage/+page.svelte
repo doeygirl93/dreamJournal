@@ -50,8 +50,9 @@
             username:storageUser
         })).data;
         if(dreams.success){
-            console.log("success!!!");
             dreamsRecord=dreams.dreams;
+            dreamsArr1=[];
+            dreamsArr2=[];
             for(let i = 0; i < Object.keys(dreamsRecord).length;i++){
                 let choice=Math.floor(Math.random()*2);
                 if(choice==1){
@@ -93,6 +94,7 @@
     let analysisVisiblity:string=$state("display:none");
     
     async function createDream(){
+
         if(dreamName==""){
             creationErrMsg="name empty";
         }else if(dreamDesc==""){
@@ -189,6 +191,8 @@
     function zoomFalse(){
         isZoomed=false;
         starsDisplay="display:block";
+        analysisVisiblity="display:none";
+        menuButtonsVisibility="display:flex";
     }
 
 </script>
@@ -198,8 +202,8 @@
 	<meta name="description" content="Main page" />
 </svelte:head>
 
-<div class="w-[100%] h-[100%] text-center box-border p-[15px]">
-    <main class="relative w-full h-screen overflow-hidden font-sans text-center box-border p-[10px]">
+<div class="w-[100%] h-[100%] overflow-hidden text-center box-border p-[15px]">
+    <main class="relative w-full h-screen font-sans text-center box-border p-[10px]">
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center md:pl-10rem">
             <div onclick={isZoomedTrue} class = "transition-all duration-1500 ease-in-out transform flex items-center justify-center text-4xl {isZoomed ? 'scale-[1.125] translate-y-[-5%] translate-x-[-32%] md:translate-x-[-48%] lg:translate-x-[-64%]':'scale-100'}">
                 <img src={lightver} class="mt-[40%] w-[90%]">
@@ -222,6 +226,10 @@
                 <input type="text" class="bg-white" bind:value={comment}>
                 <button class="bg-blue-400" bind:this={commentButton}>post comment</button>
             </div>
+        </div>
+
+        <div style={analysisVisiblity}>
+            <p class="text-white w-[50%] absolute right-5 top-[50%] transform translate-y-[-50%]">{analysis}</p>
         </div>
 
         {#if isZoomed}
@@ -302,9 +310,6 @@
                                 </button>
                         </motion.button>
                     </div>
-                    <div style={analysisVisiblity}>
-                        <p class="text-white">{analysis}</p>
-                    </div>
                 </div>
         {/if}
 
@@ -312,8 +317,7 @@
 
 
         {#if showAddDreamMenu}
-            <div class="absolute top-[50%] left-[50%] transform translate-x-[-50%] translate-y-[-50%] w-[30%] h-[75%] bg-blue-950 rounded-t-4xl border-4 border-white/20">
-
+            <div class="absolute top-[50%] left-[50%] transform translate-x-[-50%] translate-y-[-50%] w-[30%] bg-blue-950 rounded-t-4xl border-4 border-white/20">
             <button class="absolute top-2 right-4 text-xl bg-teal-400/50 rounded-full px-4 py-1 font-extrabold font-stretch-50% text-yellow-400 transition-all duration-1000 hover:scale-110 active:scale-90
             " onclick={() => showAddDreamMenu = false}> 
                 X
@@ -332,7 +336,7 @@
                 <label for="visibility"
                 class="text-white tracking-widest">Make this dream public?</label>
             </div>
-            <button class="mt-4 bg-blue-600/40 hover:bg-blue-900 rounded-full border boder-white/10 px-4 py-1 text-white/90 transition-all duration-1000 hover:scale-110 active:scale-90 py-2 rounded-lg font-bold transition-colors"onclick={createDream}>Create</button>
+            <button class="mt-4 bg-blue-600/40 hover:bg-blue-900 rounded-full border boder-white/10 px-4 py-1 text-white/90 transition-all duration-1000 hover:scale-110 active:scale-90 py-2 rounded-lg font-bold transition-colors" onclick={createDream}>Create</button>
 
             <div class="absolute top-65/64 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                 {#if creationErrMsg}
@@ -364,24 +368,13 @@
     </div>
 </div>
 
-<div class="bg-gradient-to-b from-[#0B0B1F] from-[0%] via-[#242A52] via-[60%] via-[#34346B] via-[100%] absolute top-[50%] left-[50%] w-[100%] h-[100%] transform translate-x-[-50%] translate-y-[-50%]" style="z-index:-1">
+<div class="bg-gradient-to-b from-[#0B0B1F] from-[0%] via-[#242A52] via-[60%] via-[#34346B] via-[100%] absolute top-[50%] left-[50%] w-[100%] h-[120%] overflow-hidden transform translate-x-[-50%] translate-y-[-50%]" style="z-index:-1">
     <div class="bg-animation">
         <div id='stars'></div>
         <div id='stars2'></div>
         <div id='stars3'></div>
         <div id='stars4'></div>
     </div><!-- / STAR ANIMATION -->
-</div>
-<div>
-    <h1>Create</h1>
-    <p>Name</p><input type="text" placeholder="name" id="name" bind:value={dreamName}>
-    <p>Content</p><textarea name="content" rows="4" cols="50" placeholder="content" bind:value={dreamDesc}></textarea>
-    <br>
-    <input type="checkbox" name="visibility" id="visibility" onchange={function(){this.checked==true?dreamPublic=true:dreamPublic=false}}>
-    <label for="visibility">Public?</label>
-    <br>
-    <button onclick={createDream}>Create</button>
-    <p>{creationErrMsg}</p>
 </div>
 
 <style>
